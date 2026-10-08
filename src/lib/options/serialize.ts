@@ -126,7 +126,7 @@ export function decodeSession(encoded: string): StrategySession | null {
     }
     return {
       spot: raw.s,
-      ticker: typeof raw.t === "string" ? raw.t : "DEMO",
+      ticker: typeof raw.t === "string" ? raw.t : "",
       currency: typeof raw.c === "string" ? raw.c : "USD",
       presetId: typeof raw.p === "string" ? raw.p : null,
       legs,

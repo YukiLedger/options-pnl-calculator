@@ -1,5 +1,6 @@
 "use client";
 
+import type { QuoteResult } from "@/app/api/quote/route";
 import { LegEditor } from "@/components/leg-editor";
 import { ModeToggle } from "@/components/mode-toggle";
 import { NumberInput } from "@/components/number-input";
@@ -7,8 +8,8 @@ import { PnlChart } from "@/components/pnl-chart";
 import { RiskSummary } from "@/components/risk-summary";
 import { StrategyPresets } from "@/components/strategy-presets";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { TickerField } from "@/components/ticker-field";
 import { VolCrushPanel } from "@/components/vol-crush-panel";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   applyPreset,
@@ -201,6 +202,25 @@ export function Workbench() {
     }
   };
 
+  const handleQuote = useCallback(
+    (quote: QuoteResult) => {
+      updateSession((prev) => {
+        const next: StrategySession = {
+          ...prev,
+          ticker: quote.symbol,
+          spot: quote.price,
+          currency: quote.currency || prev.currency,
+        };
+        // Rebuild active preset strikes around the live spot
+        if (next.presetId) {
+          return applyPreset(next, next.presetId);
+        }
+        return next;
+      }, true);
+    },
+    [updateSession],
+  );
+
   const showVolPanel =
     session.mode === "markToModel" || session.mode === "ivCrush";
 
@@ -228,23 +248,13 @@ export function Workbench() {
       <section className="panel mb-4 p-4 sm:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-            <div>
-              <Label htmlFor="ticker" className="text-xs">
-                Ticker
-              </Label>
-              <Input
-                id="ticker"
-                className="mt-1 h-9 font-medium tracking-wide uppercase"
-                value={session.ticker}
-                maxLength={12}
-                onChange={(e) =>
-                  updateSession((prev) => ({
-                    ...prev,
-                    ticker: e.target.value.toUpperCase(),
-                  }))
-                }
-              />
-            </div>
+            <TickerField
+              ticker={session.ticker}
+              onTickerChange={(ticker) =>
+                updateSession((prev) => ({ ...prev, ticker }))
+              }
+              onQuote={handleQuote}
+            />
             <div>
               <Label htmlFor="spot" className="text-xs">
                 Reference spot
@@ -266,7 +276,7 @@ export function Workbench() {
             <div className="col-span-2 sm:col-span-1">
               <Label className="text-xs">Currency</Label>
               <div className="mt-1 flex h-9 items-center rounded-lg border border-input bg-muted/40 px-3 font-tabular text-sm text-muted-foreground">
-                USD
+                {session.currency || "USD"}
               </div>
             </div>
           </div>
