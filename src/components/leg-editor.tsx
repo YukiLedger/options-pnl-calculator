@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import { NumberInput } from "@/components/number-input";
 import { Label } from "@/components/ui/label";
 import {
   formatMoney,
@@ -193,19 +193,13 @@ export function LegEditor({
                     <Label htmlFor={`${leg.id}-strike`} className="text-xs">
                       Strike
                     </Label>
-                    <Input
+                    <NumberInput
                       id={`${leg.id}-strike`}
-                      type="number"
-                      inputMode="decimal"
                       step="0.5"
-                      min="0"
+                      min={0.01}
                       className="font-tabular mt-1 h-8"
-                      value={Number.isFinite(leg.strike) ? leg.strike : ""}
-                      onChange={(e) =>
-                        onChange(leg.id, {
-                          strike: Number(e.target.value),
-                        })
-                      }
+                      value={leg.strike}
+                      onValueChange={(strike) => onChange(leg.id, { strike })}
                       aria-invalid={issues.some((i) => i.field === "strike")}
                     />
                   </div>
@@ -213,19 +207,13 @@ export function LegEditor({
                     <Label htmlFor={`${leg.id}-premium`} className="text-xs">
                       Premium
                     </Label>
-                    <Input
+                    <NumberInput
                       id={`${leg.id}-premium`}
-                      type="number"
-                      inputMode="decimal"
                       step="0.05"
-                      min="0"
+                      min={0}
                       className="font-tabular mt-1 h-8"
-                      value={Number.isFinite(leg.premium) ? leg.premium : ""}
-                      onChange={(e) =>
-                        onChange(leg.id, {
-                          premium: Number(e.target.value),
-                        })
-                      }
+                      value={leg.premium}
+                      onValueChange={(premium) => onChange(leg.id, { premium })}
                       aria-invalid={issues.some((i) => i.field === "premium")}
                     />
                   </div>
@@ -233,17 +221,13 @@ export function LegEditor({
                     <Label htmlFor={`${leg.id}-qty`} className="text-xs">
                       Qty
                     </Label>
-                    <Input
+                    <NumberInput
                       id={`${leg.id}-qty`}
-                      type="number"
-                      inputMode="numeric"
                       step="1"
                       className="font-tabular mt-1 h-8"
-                      value={Number.isFinite(leg.quantity) ? leg.quantity : ""}
-                      onChange={(e) =>
-                        onChange(leg.id, {
-                          quantity: Number(e.target.value),
-                        })
+                      value={leg.quantity}
+                      onValueChange={(quantity) =>
+                        onChange(leg.id, { quantity })
                       }
                       aria-invalid={issues.some((i) => i.field === "quantity")}
                     />
@@ -252,20 +236,14 @@ export function LegEditor({
                     <Label htmlFor={`${leg.id}-mult`} className="text-xs">
                       Mult
                     </Label>
-                    <Input
+                    <NumberInput
                       id={`${leg.id}-mult`}
-                      type="number"
-                      inputMode="numeric"
                       step="1"
-                      min="1"
+                      min={1}
                       className="font-tabular mt-1 h-8"
-                      value={
-                        Number.isFinite(leg.multiplier) ? leg.multiplier : ""
-                      }
-                      onChange={(e) =>
-                        onChange(leg.id, {
-                          multiplier: Number(e.target.value),
-                        })
+                      value={leg.multiplier}
+                      onValueChange={(multiplier) =>
+                        onChange(leg.id, { multiplier })
                       }
                       aria-invalid={issues.some((i) => i.field === "multiplier")}
                     />

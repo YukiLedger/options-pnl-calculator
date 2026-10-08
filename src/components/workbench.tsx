@@ -2,6 +2,7 @@
 
 import { LegEditor } from "@/components/leg-editor";
 import { ModeToggle } from "@/components/mode-toggle";
+import { NumberInput } from "@/components/number-input";
 import { PnlChart } from "@/components/pnl-chart";
 import { RiskSummary } from "@/components/risk-summary";
 import { StrategyPresets } from "@/components/strategy-presets";
@@ -248,18 +249,16 @@ export function Workbench() {
               <Label htmlFor="spot" className="text-xs">
                 Reference spot
               </Label>
-              <Input
+              <NumberInput
                 id="spot"
-                type="number"
-                inputMode="decimal"
                 step="0.5"
-                min="0"
+                min={0.01}
                 className="font-tabular mt-1 h-9"
                 value={session.spot}
-                onChange={(e) =>
+                onValueChange={(spot) =>
                   updateSession((prev) => ({
                     ...prev,
-                    spot: Number(e.target.value),
+                    spot,
                   }))
                 }
               />
