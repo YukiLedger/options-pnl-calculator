@@ -11,7 +11,7 @@ import {
   type SurfaceGrid,
   type VolParams,
 } from "@/lib/options";
-import { Html, Line, OrbitControls, Text } from "@react-three/drei";
+import { Line, OrbitControls, Text } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
 import * as THREE from "three";
@@ -233,29 +233,34 @@ function ValueCallouts({
   spot: number;
   dark: boolean;
 }) {
-  const chip = dark
-    ? "rounded border border-white/15 bg-[#121a24]/92 px-2 py-1 text-[10px] font-medium text-[#e7eef6] shadow-sm backdrop-blur"
-    : "rounded border border-black/10 bg-white/92 px-2 py-1 text-[10px] font-medium text-[#0f1c2e] shadow-sm backdrop-blur";
-
+  // Use Text (not Html portals) to avoid React sync-unmount warnings when pausing/rebuilding the canvas.
+  const labelColor = dark ? "#e7eef6" : "#0f1c2e";
+  const postColor = dark ? "#2bb8a8" : "#0f766e";
   return (
-    <>
-      <Html position={[prePos[0], prePos[1] + 0.28, prePos[2]]} center distanceFactor={10}>
-        <div className={chip}>
-          <div className="opacity-70">Pre @ S{formatPrice(spot, 0)}</div>
-          <div className="font-tabular">
-            IV {preIvPct.toFixed(0)}% · {formatMoney(prePnl, { signed: true })}
-          </div>
-        </div>
-      </Html>
-      <Html position={[postPos[0], postPos[1] + 0.28, postPos[2]]} center distanceFactor={10}>
-        <div className={chip}>
-          <div className="opacity-70">Post @ S{formatPrice(spot, 0)}</div>
-          <div className="font-tabular text-[#0f766e] dark:text-[#2bb8a8]">
-            IV {postIvPct.toFixed(0)}% · {formatMoney(postPnl, { signed: true })}
-          </div>
-        </div>
-      </Html>
-    </>
+    <group>
+      <Text
+        position={[prePos[0], prePos[1] + 0.32, prePos[2]]}
+        fontSize={0.14}
+        color={labelColor}
+        anchorX="center"
+        anchorY="bottom"
+        outlineWidth={0.01}
+        outlineColor={dark ? "#0b1118" : "#eef2f4"}
+      >
+        {`Pre S${formatPrice(spot, 0)} · ${preIvPct.toFixed(0)}% · ${formatMoney(prePnl, { signed: true })}`}
+      </Text>
+      <Text
+        position={[postPos[0], postPos[1] + 0.32, postPos[2]]}
+        fontSize={0.14}
+        color={postColor}
+        anchorX="center"
+        anchorY="bottom"
+        outlineWidth={0.01}
+        outlineColor={dark ? "#0b1118" : "#eef2f4"}
+      >
+        {`Post S${formatPrice(spot, 0)} · ${postIvPct.toFixed(0)}% · ${formatMoney(postPnl, { signed: true })}`}
+      </Text>
+    </group>
   );
 }
 
@@ -554,28 +559,30 @@ export function PnlSurface3D({ legs, spot, vol, volOk }: PnlSurface3DProps) {
           background: `linear-gradient(180deg, ${bg} 0%, ${dark ? "#121a24" : "#e2e9ef"} 100%)`,
         }}
       >
-        {active ? (
-          <Canvas
-            camera={{ position: [5.4, 3.4, 6.0], fov: 42 }}
-            dpr={[1, 1.75]}
-            gl={{ antialias: true, alpha: true }}
-          >
-            <color attach="background" args={[bg]} />
-            <SurfaceMesh legs={legs} spot={spot} vol={vol} dark={dark} />
-            <OrbitControls
-              enablePan={false}
-              minDistance={4}
-              maxDistance={14}
-              maxPolarAngle={Math.PI * 0.48}
-              autoRotate
-              autoRotateSpeed={0.45}
-            />
-          </Canvas>
-        ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            Render paused — resume to orbit the surface.
+        <Canvas
+          camera={{ position: [5.4, 3.4, 6.0], fov: 42 }}
+          dpr={[1, 1.75]}
+          gl={{ antialias: true, alpha: true }}
+          frameloop={active ? "always" : "never"}
+        >
+          <color attach="background" args={[bg]} />
+          <SurfaceMesh legs={legs} spot={spot} vol={vol} dark={dark} />
+          <OrbitControls
+            enablePan={false}
+            minDistance={4}
+            maxDistance={14}
+            maxPolarAngle={Math.PI * 0.48}
+            autoRotate={active}
+            autoRotateSpeed={0.45}
+          />
+        </Canvas>
+        {!active ? (
+          <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
+            <span className="rounded-md border border-border bg-paper/90 px-2 py-1 text-xs text-muted-foreground">
+              Render paused
+            </span>
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="space-y-3 border-t border-border/70 px-4 py-3 sm:px-5">
