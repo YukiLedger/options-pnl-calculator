@@ -1,5 +1,6 @@
 "use client";
 
+import { NumberInput } from "@/components/number-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -51,17 +52,13 @@ export function VolCrushPanel({
           <Label htmlFor="iv" className="text-xs">
             Pre-event IV %
           </Label>
-          <Input
+          <NumberInput
             id="iv"
-            type="number"
-            inputMode="decimal"
             step="1"
-            min="0.1"
+            min={0.1}
             className="font-tabular mt-1 h-8"
             value={ivPct}
-            onChange={(e) =>
-              onChange({ iv: Number(e.target.value) / 100 })
-            }
+            onValueChange={(v) => onChange({ iv: v / 100 })}
             aria-invalid={crush.errors.some((e) => e.includes("Implied vol"))}
           />
         </div>
@@ -69,35 +66,27 @@ export function VolCrushPanel({
           <Label htmlFor="dte" className="text-xs">
             Days to expiry
           </Label>
-          <Input
+          <NumberInput
             id="dte"
-            type="number"
-            inputMode="numeric"
             step="1"
-            min="1"
+            min={1}
             className="font-tabular mt-1 h-8"
             value={vol.daysToExpiry}
-            onChange={(e) =>
-              onChange({ daysToExpiry: Number(e.target.value) })
-            }
+            onValueChange={(daysToExpiry) => onChange({ daysToExpiry })}
           />
         </div>
         <div>
           <Label htmlFor="crush" className="text-xs">
             Crush magnitude %
           </Label>
-          <Input
+          <NumberInput
             id="crush"
-            type="number"
-            inputMode="decimal"
             step="5"
-            min="0"
-            max="100"
+            min={0}
+            max={100}
             className="font-tabular mt-1 h-8"
             value={crushPct}
-            onChange={(e) =>
-              onChange({ crushPct: Number(e.target.value) / 100 })
-            }
+            onValueChange={(v) => onChange({ crushPct: v / 100 })}
           />
         </div>
         <div>
@@ -117,32 +106,25 @@ export function VolCrushPanel({
           <Label htmlFor="rate" className="text-xs">
             Rate %
           </Label>
-          <Input
+          <NumberInput
             id="rate"
-            type="number"
-            inputMode="decimal"
             step="0.25"
             className="font-tabular mt-1 h-8"
             value={ratePct}
-            onChange={(e) =>
-              onChange({ rate: Number(e.target.value) / 100 })
-            }
+            onValueChange={(v) => onChange({ rate: v / 100 })}
           />
         </div>
         <div>
           <Label htmlFor="div" className="text-xs">
             Div yield %
           </Label>
-          <Input
+          <NumberInput
             id="div"
-            type="number"
-            inputMode="decimal"
             step="0.25"
+            min={0}
             className="font-tabular mt-1 h-8"
             value={qPct}
-            onChange={(e) =>
-              onChange({ dividendYield: Number(e.target.value) / 100 })
-            }
+            onValueChange={(v) => onChange({ dividendYield: v / 100 })}
           />
         </div>
       </div>
