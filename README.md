@@ -12,6 +12,7 @@ Build call/put legs, load desk-familiar presets, then switch modes: terminal pay
 
 - Multi-leg book editor (buy/sell, call/put, strike, premium, qty, multiplier)
 - Strategy presets with editable legs
+- **Ticker quote lookup** — type `AAPL` / `SPY` / etc., load last price into reference spot (Yahoo delayed quote; not an options chain)
 - **Analysis modes:** Expiration · Mark-to-model · IV crush
 - Instant P&L chart (Recharts) with spot / strike / breakeven guides
 - Dual pre-event / post-crush curves + vega / crush Δ callouts
@@ -21,14 +22,14 @@ Build call/put legs, load desk-familiar presets, then switch modes: terminal pay
 - Shareable URL state (strategy encoded in the query string)
 - Unit-tested payoff + Black–Scholes + crush + surface engine under `src/lib/options/`
 
-**Explicitly not in v1:** vol skew smile fitting, full Greeks dashboard, live market data, auth, or a backend.
+**Explicitly not in v1:** live options chains, vol skew smile fitting, full Greeks dashboard, auth, or a database.
 
 ## Assumptions
 
 1. **Expiration mode:** European-style terminal intrinsic vs entry premium
 2. **Mark-to-model / IV crush:** flat session IV, continuous rate & dividend yield (defaults 5% / 0%), European BSM
 3. Crush: `postIV = preIV × (1 − crush%)` — no skew
-4. Premium is the user-entered entry price (not a live mid)
+4. Ticker quotes set **underlying spot only** (delayed last price). Option premiums stay user-entered — not live option mids
 5. Default multiplier `100` (US equity options convention)
 6. No fees, slippage, or assignment mechanics
 7. Short calls may show **unlimited** max loss on the expiration curve

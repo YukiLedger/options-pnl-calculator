@@ -247,7 +247,7 @@ export function getPreset(id: string): StrategyPreset | undefined {
 export function createEmptySession(): StrategySession {
   return {
     spot: 100,
-    ticker: "DEMO",
+    ticker: "",
     currency: "USD",
     legs: [],
     presetId: null,
@@ -261,7 +261,7 @@ export function createDefaultSession(): StrategySession {
   const preset = getPreset("iron-condor")!;
   return {
     spot,
-    ticker: "DEMO",
+    ticker: "",
     currency: "USD",
     legs: preset.build(spot),
     presetId: preset.id,
