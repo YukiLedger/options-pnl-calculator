@@ -1,5 +1,12 @@
 # Options P&L
 
+[![CI](https://github.com/YukiLedger/options-pnl-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/YukiLedger/options-pnl-calculator/actions/workflows/ci.yml)
+[![Live demo](https://img.shields.io/badge/demo-live-0f766e)](https://options-pnl-calculator.vercel.app)
+
+**[Live demo](https://options-pnl-calculator.vercel.app)** — Iron Condor + IV crush mode loads by default.
+
+![Options P&L workbench — Iron Condor with pre- vs post-crush dual curves](docs/demo.png)
+
 A browser-native **multi-leg options strategy workbench** for expiration P&L and earnings **IV crush** stress.
 
 Build call/put legs, load desk-familiar presets, then switch modes: terminal payoff, flat-IV Black–Scholes marks, or pre-event vs post-crush dual curves — without conflating those models.
@@ -63,12 +70,16 @@ src/
 
 ## Deploy
 
-Deploy on Vercel (or any Next.js host). No environment variables required — the demo is fully client-side.
+Deploy on Vercel (or any Next.js host). No environment variables required — the demo is fully client-side. Live URL: [https://options-pnl-calculator.vercel.app](https://options-pnl-calculator.vercel.app).
 
 ## Interview demo (~2 min)
 
-1. Open (https://options-pnl-calculator.vercel.app/) — Iron Condor + **IV crush** mode loads by default  
-2. Show dual curves: pre-event vs post-crush; call out short-vega crush Δ at spot  
-3. Switch to **Long Straddle** — long vega “can lose even if underlying goes your way”  
-4. Flip to **Expiration** mode — same book, terminal payoff only (modes stay separate)  
+1. Open the [live demo](https://options-pnl-calculator.vercel.app) — Iron Condor + **IV crush** mode loads by default
+2. Show dual curves: pre-event vs post-crush; call out short-vega crush Δ at spot
+3. Switch to **Long Straddle** — long vega “can lose even if underlying goes your way”
+4. Flip to **Expiration** mode — same book, terminal payoff only (modes stay separate)
 5. Mention: *flat IV + global crush only — no skew surface yet*
+
+## License
+
+MIT — see [LICENSE](LICENSE).
