@@ -67,7 +67,7 @@ Deploy on Vercel (or any Next.js host). No environment variables required — th
 
 ## Interview demo (~2 min)
 
-1. Open the live URL — Iron Condor + **IV crush** mode loads by default  
+1. Open (https://options-pnl-calculator.vercel.app/) — Iron Condor + **IV crush** mode loads by default  
 2. Show dual curves: pre-event vs post-crush; call out short-vega crush Δ at spot  
 3. Switch to **Long Straddle** — long vega “can lose even if underlying goes your way”  
 4. Flip to **Expiration** mode — same book, terminal payoff only (modes stay separate)  
