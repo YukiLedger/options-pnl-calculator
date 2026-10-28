@@ -82,4 +82,4 @@ Deploy on Vercel (or any Next.js host). No environment variables required — th
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT © [Yuki](https://github.com/YukiLedger) — see [LICENSE](LICENSE).
